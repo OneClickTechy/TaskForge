@@ -7,6 +7,13 @@ export const userApi = createApi({
   }),
   tagTypes: ['User'], 
   endpoints: (builder) => ({
+    verify: builder.mutation({
+      query: (email) => ({
+        url: `/verify`,
+        method: "POST",
+        body: {email},
+      })
+    }),
     register: builder.mutation({
       query: (userInfo) => ({
         url: `/register`,
@@ -48,4 +55,5 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useGetmeQuery,
+  useVerifyMutation,
 } = userApi;

@@ -4,6 +4,18 @@ import createToken from "../utils/createToken.js";
 import { deleteTask } from "./task.controller.js";
 import { Task } from "../models/task.model.js";
 
+export const checkEmail = async (req, res) => {
+  
+    const { email } = req.body;
+    const user = await User.findOne({email})
+    if(user){
+      res.json({exists: true})
+    } else {
+      res.json({exists: false})
+    }
+  
+}
+
 export const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -92,16 +104,16 @@ export const logout = async (req, res) => {
   }
 };
 
-export const deleteUser = async (req, res) => {
-  try {
-    const userId = req.user._id;
-    await User.findByIdAndDelete(userId);
-    await Task.deleteMany({ userId });
-    res.status(200).json({ message: "User and user's tasks are deleted" });
-  } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
+// export const deleteUser = async (req, res) => {
+//   try {
+//     const userId = req.user._id;
+//     await User.findByIdAndDelete(userId);
+//     await Task.deleteMany({ userId });
+//     res.status(200).json({ message: "User and user's tasks are deleted" });
+//   } catch (error) {
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// };
 
 export const getme = async (req, res) => {
   try {

@@ -2,13 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base{
-    input[type="text"],
-    input[type="email"],
-    input[type="password"],
-    input[type="date"],
-    select {
-        @apply border border-black rounded-md p-2 w-full focus:outline-none;
+@layer base {
+    input {
+        @apply focus:outline-none;
+    }
+}
+@layer components{
+    .input-outbox {
+        @apply border border-black rounded-md ;
     }
 
     button {
