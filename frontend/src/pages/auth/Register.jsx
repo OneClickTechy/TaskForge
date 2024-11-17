@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { useCallback, useEffect, useState } from "react";
 import { RiLockPasswordLine, RiUser6Line, RiMailLine } from "react-icons/ri";
-import { CiCircleQuestion } from "react-icons/ci";
 import { FaCheck } from "react-icons/fa";
+import { FaXmark } from "react-icons/fa6";
+
 import {
   PasswordSameChecker,
   PasswordValidChecker,
@@ -12,13 +14,13 @@ import {
   useVerifyMutation,
 } from "../../app/services/userSlicer";
 import Spinner from "../../components/Spinner";
-import { ToastContainer, toast } from 'react-toastify';
-import "react-toastify/ReactToastify.css"
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/ReactToastify.css";
 import { useNavigate } from "react-router";
 
 const InputField = ({
   icon: Icon,
-  icon2: Icon2 = "span",
+  icon2: Icon2,
   name,
   type,
   placeholder,
@@ -49,11 +51,33 @@ const InputField = ({
         autoComplete={autoComplete}
         className="grow"
       />
-      {type === 'text' && status === "Username is valid" && <Icon2 />}
-      {type === 'email' && status === "Email is available." && <Icon2 />}
+      {value && (
+        <Icon2
+          className={`${
+            value && status === "Username is valid" || status === "Email is available."
+              ? "text-green-500"
+              : "text-red-500"
+          }`}
+        />
+      )}
+      {/* {type === 'text' && status === "Username is valid" && <Icon2 />}
+      {type === 'email' && status === "Email is available." && <Icon2 />} */}
       {type === "email" && value && isVerify && <Spinner />}
     </div>
   );
+};
+InputField.propTypes = {
+  icon: PropTypes.elementType.isRequired,
+  icon2: PropTypes.elementType,
+  name: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  autoComplete: PropTypes.string,
+  onBlur: PropTypes.func,
+  isVerify: PropTypes.bool,
+  status: PropTypes.string,
 };
 
 const PasswordInputField = ({
@@ -85,9 +109,20 @@ const PasswordInputField = ({
         value={value}
         onChange={onChange}
       />
-      {isPasswordSame && isPasswordValid && <Icon2 />}
+      {isPasswordSame && isPasswordValid && <Icon2 className={`${isPasswordSame && isPasswordValid ? 'text-green-500':'text-red-500'}`}/>}
     </div>
   );
+};
+PasswordInputField.propTypes = {
+  icon: PropTypes.elementType.isRequired,
+  icon2: PropTypes.elementType,
+  name: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  isPasswordSame: PropTypes.bool.isRequired,
+  isPasswordValid: PropTypes.bool.isRequired,
 };
 
 const PasswordValidate = ({ password }) => {
@@ -133,7 +168,7 @@ const PasswordValidate = ({ password }) => {
         </small>
         <small className="">
           Has no repeat{" "}
-          {hasUppercase && (
+          {password.length > 0 && noRepeat && (
             <span className="text-green-600 text-xl font-semibold">
               &#x2713;
             </span>
@@ -143,11 +178,14 @@ const PasswordValidate = ({ password }) => {
     </div>
   );
 };
+PasswordValidate.propTypes = {
+  password: PropTypes.string.isRequired,
+};
 
 const Register = () => {
   const [verifyEmail, { isLoading: isVerify }] = useVerifyMutation();
   const [register, { isLoading }] = useRegisterMutation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [registerInfo, setRegisterInfo] = useState({
     username: "",
     email: "",
@@ -166,31 +204,39 @@ const Register = () => {
 
   const { username, email, password, confirmPassword } = registerInfo;
 
-  const usernameRegex = /^[a-zA-Z]/;
-  const isUsernameValid = Boolean(username.length >= 6 && usernameRegex.test(username));
-  const handleVerifyUsername = () => {
-    if(!usernameRegex.test(username)){
-      setUsernameStatus("Username is must start with an alphabets");
-    }
-    else if(username.length<6){
-      setUsernameStatus("min 6 charactors required")
-    }
-    else if(username.length>20){
-      setUsernameStatus("max 20 charactors required")
+  
+  
+  const handleVerifyUsername = useCallback(() => {
+    if (!/^[a-zA-Z]/.test(username)) {
+      setUsernameStatus("Username must start with an alphabet");
+    } else if (username.length < 6) {
+      setUsernameStatus("Minimum 6 characters required");
+    } else if (username.length > 20) {
+      setUsernameStatus("Maximum 20 characters allowed");
     } else {
       setUsernameStatus("Username is valid");
     }
-  }
+  }, [username]); // Include dependencies here if needed
   
+  useEffect(() => {
+    handleVerifyUsername();
+  }, [username, handleVerifyUsername]);
+  
+  
+
   const handleVerifyEmail = async () => {
     if (email) {
       if (!validator.isEmail(email)) {
         setEmailStatus("Provide valid email");
-        return
+        return;
       }
       try {
         const result = await verifyEmail(email).unwrap();
-        setEmailStatus(result.exists ?  "This email is already in use." : "Email is available.");
+        setEmailStatus(
+          result.exists
+            ? "This email is already in use."
+            : "Email is available."
+        );
       } catch (error) {
         console.error("Error:", error);
         setEmailStatus("Error verifying the email.");
@@ -209,7 +255,7 @@ const Register = () => {
       email &&
       password &&
       confirmPassword &&
-      isUsernameValid &&
+      usernameStatus==="Username is valid" &&
       emailStatus === "Email is available." &&
       isPasswordSame &&
       isPasswordValid
@@ -243,10 +289,10 @@ const Register = () => {
         draggable: true,
         progress: undefined,
         theme: "light",
-        });
-        setTimeout(() => {
-          navigate("/")
-        }, 2000);
+      });
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
     } catch (error) {
       console.log(error.data.error);
       toast.error(error.data.error, {
@@ -258,12 +304,10 @@ const Register = () => {
         draggable: true,
         progress: undefined,
         theme: "light",
-        });
+      });
     }
   };
-  useEffect(() =>{
-    console.log(usernameStatus)
-  }, [usernameStatus])
+
   return (
     <section className="flex flex-col gap-8 p-2">
       <h1 className="text-2xl font-bold text-center">Welcome to TaskForge</h1>
@@ -274,7 +318,7 @@ const Register = () => {
       >
         <InputField
           icon={RiUser6Line}
-          icon2={FaCheck}
+          icon2={usernameStatus === "Username is valid" ? FaCheck : FaXmark}
           name={"username"}
           type={"text"}
           placeholder={"user name"}
@@ -284,12 +328,16 @@ const Register = () => {
           autoComplete={"username"}
           status={usernameStatus}
         />
-        {username.length > 0 && usernameStatus && usernameStatus !== 'Username is valid' && (
-          <span className="text-red-500 px-2" aria-live="polite">{usernameStatus}</span>
-        )}
+        {username.length > 0 &&
+          usernameStatus &&
+          usernameStatus !== "Username is valid" && (
+            <span className="text-red-500 px-2" aria-live="polite">
+              {usernameStatus}
+            </span>
+          )}
         <InputField
           icon={RiMailLine}
-          icon2={FaCheck}
+          icon2={emailStatus === "Email is available." ? FaCheck : FaXmark}
           name={"email"}
           type={"email"}
           placeholder={"email"}
@@ -301,7 +349,9 @@ const Register = () => {
           status={emailStatus}
         />
         {email.length > 0 && emailStatus !== "Email is available." && (
-          <span className="text-red-500 px-2" aria-live="polite">{emailStatus}</span>
+          <span className="text-red-500 px-2" aria-live="polite">
+            {emailStatus}
+          </span>
         )}
 
         <PasswordInputField
@@ -330,17 +380,22 @@ const Register = () => {
         {password.length > 0 &&
           confirmPassword.length > 0 &&
           !isPasswordSame && (
-            <div className="px-2 text-red-500 animate-shakeX" aria-live="polite">
-              Password didn't match
+            <div
+              className="px-2 text-red-500 animate-shakeX"
+              aria-live="polite"
+            >
+              Password didn&apos;t match
             </div>
           )}
         <button
-  type="submit"
-  disabled={!canSave || isLoading}
-  className={`${!canSave || isLoading ? "bg-black/50 cursor-not-allowed" : null}`}
->
-  {isLoading ? <Spinner /> : 'Register'}
-</button>
+          type="submit"
+          disabled={!canSave || isLoading}
+          className={`${
+            !canSave || isLoading ? "bg-black/50 cursor-not-allowed" : null
+          }`}
+        >
+          {isLoading ? <Spinner /> : "Register"}
+        </button>
       </form>
       <PasswordValidate password={password} />
       <ToastContainer />

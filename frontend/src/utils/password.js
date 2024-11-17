@@ -10,8 +10,7 @@ const PasswordValidChecker = (password) => {
     lowercase: /[a-z]+/g,
     number: /[0-9]+/g,
     symbols: /[@#!&*.]+/g,
-    repeat: /^(?=.*([a-zA-Z0-9])\1{2,}|012|123|234|345|456|567|678|789|987|876|765|654|543|432|321|1234|abcd|bcde|cdef|defg|efgh|fghi|ghij|hijk).+/
-
+    repeat: /(?=.*([a-zA-Z0-9])\1{2,}|012|123|234|345|456|567|678|789|987|876|765|654|543|432|321|1234|abcd|bcde|cdef|defg|efgh|fghi|ghij|hijk).+/
   };
   const passwordCheck = {
     hasUppercase: passwordRegex.uppercase.test(password),

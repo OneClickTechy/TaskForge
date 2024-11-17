@@ -1,4 +1,3 @@
-import React from "react";
 import Navigation from "./pages/auth/Navigation";
 import { Outlet } from "react-router";
 
