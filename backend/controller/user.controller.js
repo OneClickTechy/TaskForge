@@ -1,8 +1,6 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
-import { deleteTask } from "./task.controller.js";
-import { Task } from "../models/task.model.js";
 
 export const checkEmail = async (req, res) => {
   
@@ -59,11 +57,11 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    if (!username || !password) {
+    const { email, password } = req.body;
+    if (!email || !password) {
       return res.status(400).json({ error: "please fill all" });
     }
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ error: "user not found" });
     }
