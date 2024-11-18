@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { useLogoutMutation } from "../../app/services/userSlicer";
 import LoadingPage from "../../components/LoadingPage";
-import { ToastContainer, toast } from "react-toastify";
-
 import { useNavigate } from "react-router";
+
 const Logout = () => {
   const [logout, { isLoading }] = useLogoutMutation();
   const navigate = useNavigate();
@@ -27,18 +26,7 @@ const Logout = () => {
   }
   return (
     <div className="min-h-screen w-full">
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme={"light"}
-      />
+      Redirecting to Login page
     </div>
   );
 };

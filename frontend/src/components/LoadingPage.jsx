@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const LoadingPage = ({ content }) => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -10,5 +12,7 @@ const LoadingPage = ({ content }) => {
     </div>
   );
 };
-
+LoadingPage.propTypes = {
+  content: PropTypes.string.isRequired
+}
 export default LoadingPage;

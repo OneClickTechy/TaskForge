@@ -266,7 +266,7 @@ const Register = () => {
     password,
     confirmPassword
   ).isValid;
-  const handleShowPasswordValidator = (e) => {
+  const handleShowPasswordValidator = () => {
     setShowPasswordValidator(!showPasswordValidator);
   };
   const canSave = Boolean(
