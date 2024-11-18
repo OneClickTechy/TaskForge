@@ -8,7 +8,7 @@ const PrivateRoutes = ({children}) => {
     const {data: user, isLoading} = useGetmeQuery();
 
     if(isLoading){
-        return <LoadingPage />
+        return <LoadingPage content={"Loading, please wait..."} />
     }
     if(!user){
         return <Navigate to={"/login"} replace />

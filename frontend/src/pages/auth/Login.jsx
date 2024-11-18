@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { RiLockPasswordLine, RiMailLine } from "react-icons/ri";
 import validator from "validator";
-import { useLoginMutation, useVerifyMutation } from "../../app/services/userSlicer";
+import {
+  useLoginMutation,
+  useVerifyMutation,
+} from "../../app/services/userSlicer";
 import Spinner from "../../components/Spinner";
 import { FaXmark } from "react-icons/fa6";
 import { FaCheck, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
@@ -47,7 +50,7 @@ const InputField = ({
   );
 };
 const Login = () => {
-  const [login, {isLoading}] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
   const navigate = useNavigate();
   const [verifyEmail, { isLoading: isVerify }] = useVerifyMutation();
   const [loginInfo, setLoginInfo] = useState({
@@ -82,7 +85,12 @@ const Login = () => {
     }
   };
 
-  const canLogin = Boolean(emailStatus === "Email is found." && password && password.length >= 6 && password.length <= 20 );
+  const canLogin = Boolean(
+    emailStatus === "Email is found." &&
+      password &&
+      password.length >= 6 &&
+      password.length <= 20
+  );
   const resetForm = () => {
     setLoginInfo({
       email: "",
@@ -93,11 +101,12 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if(!canLogin) return;
+    if (!canLogin) return;
 
     try {
       const res = await login({
-        email, password
+        email,
+        password,
       }).unwrap();
       resetForm();
       toast.success(res.message, {
@@ -125,7 +134,7 @@ const Login = () => {
         theme: "light",
       });
     }
-  }
+  };
 
   return (
     <section className="p-2 flex flex-col gap-8">
@@ -133,8 +142,7 @@ const Login = () => {
       <form className="flex flex-col gap-4" onSubmit={handleLogin}>
         <InputField
           icon={RiMailLine}
-          icon2={emailStatus!=="Email is found." ? 
-          FaXmark:FaCheck}
+          icon2={emailStatus !== "Email is found." ? FaXmark : FaCheck}
           name={"email"}
           placeholder={"email"}
           type={"email"}
@@ -144,20 +152,30 @@ const Login = () => {
           isVerify={isVerify}
           autoComplete={"email"}
         />
-        
+
         <div
-      className="flex justify-start items-center p-2 gap-2  input-outbox"
-      role="input"
-    >
-      <label htmlFor="password" className="sr-only">password</label>
-      <RiLockPasswordLine />
-      <input type={showPassword ? "text" : "password"} placeholder="password" id="password" name="password" value={password}
-      onChange={handleChangeLoginInfo} autoComplete="off" className="grow" />
-      <div onClick={() => setShowPassword(!showPassword)}>
-      {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
-      </div>
-    </div>
-    <button
+          className="flex justify-start items-center p-2 gap-2  input-outbox"
+          role="input"
+        >
+          <label htmlFor="password" className="sr-only">
+            password
+          </label>
+          <RiLockPasswordLine />
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="password"
+            id="password"
+            name="password"
+            value={password}
+            onChange={handleChangeLoginInfo}
+            autoComplete="off"
+            className="grow"
+          />
+          <div onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+          </div>
+        </div>
+        <button
           type="submit"
           disabled={!canLogin || isLoading}
           className={`${
@@ -167,7 +185,9 @@ const Login = () => {
           {isLoading ? <Spinner /> : "Login"}
         </button>
         <p className="text-center">or</p>
-        <p>Register <Link to="/register">here</Link></p>
+        <p>
+          Register <Link to="/register">here</Link>
+        </p>
       </form>
       <ToastContainer />
     </section>
