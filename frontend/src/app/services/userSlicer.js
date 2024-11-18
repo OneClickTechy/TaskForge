@@ -5,14 +5,14 @@ export const userApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8000/api/auth",
   }),
-  tagTypes: ['User'], 
+  tagTypes: ["User"],
   endpoints: (builder) => ({
     verify: builder.mutation({
       query: (email) => ({
         url: `/verify`,
         method: "POST",
-        body: {email},
-      })
+        body: { email },
+      }),
     }),
     register: builder.mutation({
       query: (userInfo) => ({
@@ -20,7 +20,7 @@ export const userApi = createApi({
         method: "POST",
         body: userInfo,
       }),
-      invalidatesTags: ['User'], 
+      invalidatesTags: ["User"],
     }),
     login: builder.mutation({
       query: (userInfo) => ({
@@ -29,7 +29,7 @@ export const userApi = createApi({
         body: userInfo,
         credentials: "include",
       }),
-      invalidatesTags: ['User'], 
+      invalidatesTags: ["User"],
     }),
     logout: builder.mutation({
       query: () => ({
@@ -37,7 +37,21 @@ export const userApi = createApi({
         method: "POST",
         credentials: "include",
       }),
-      invalidatesTags: ['User'], 
+      invalidatesTags: ["User"],
+    }),
+    forgetPassword: builder.mutation({
+      query: (email) => ({
+        url: `/forgetPassword`,
+        method: "POST",
+        body: { email },
+      }),
+    }),
+    resetPassword: builder.mutation({
+      query: (info) => ({
+        url: `/resetPassword`,
+        method: 'POST',
+        body: info,
+      })
     }),
     getme: builder.query({
       query: () => ({
@@ -45,7 +59,7 @@ export const userApi = createApi({
         method: "GET",
         credentials: "include",
       }),
-      providesTags: ['User'], 
+      providesTags: ["User"],
     }),
   }),
 });
@@ -56,4 +70,6 @@ export const {
   useLogoutMutation,
   useGetmeQuery,
   useVerifyMutation,
+  useForgetPasswordMutation,
+  useResetPasswordMutation,
 } = userApi;

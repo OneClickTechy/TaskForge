@@ -184,6 +184,7 @@ const Login = () => {
         >
           {isLoading ? <Spinner /> : "Login"}
         </button>
+          <Link to="/forgetPassword" className="text-right">forget password</Link>
         <p className="text-center">or</p>
         <p>
           Register <Link to="/register">here</Link>

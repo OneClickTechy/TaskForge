@@ -6,6 +6,7 @@ import {
   login,
   logout,
   register,
+  resetPassword,
 } from "../controller/user.controller.js";
 import protectRoutes from "../middleware/protectRoutes.js";
 
@@ -15,6 +16,7 @@ router.post("/register", register);
 router.post("/login", login);
 router.post("/logout", logout);
 router.post('/forgetPassword', forgetPassword);
+router.post('/resetPassword', resetPassword);
 router.get("/getme", protectRoutes, getme);
 
 export default router;

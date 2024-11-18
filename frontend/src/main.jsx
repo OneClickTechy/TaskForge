@@ -10,6 +10,8 @@ import Login from "./pages/auth/Login.jsx";
 import Register from "./pages/auth/Register.jsx";
 import Logout from "./pages/auth/Logout.jsx";
 import PrivateRoutes from "./components/PrivateRoutes.jsx";
+import ForgetPassword from "./pages/auth/ForgetPassword.jsx";
+import ResetPassword from "./pages/auth/ResetPassword.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
@@ -32,6 +34,8 @@ createRoot(document.getElementById("root")).render(
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
+            <Route path="/forgetPassword" element={<ForgetPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
           </Route>
         </Routes>
       </Router>
