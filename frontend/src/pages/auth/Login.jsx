@@ -7,6 +7,7 @@ import Spinner from "../../components/Spinner";
 import { FaXmark } from "react-icons/fa6";
 import { FaCheck, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 const InputField = ({
   icon: Icon,
@@ -127,8 +128,8 @@ const Login = () => {
   }
 
   return (
-    <section className="p-2 flex flex-col gap-">
-      <h1>Welcome to TaskForge</h1>
+    <section className="p-2 flex flex-col gap-8">
+      <h1 className="text-2xl font-bold text-center">Welcome to TaskForge</h1>
       <form className="flex flex-col gap-4" onSubmit={handleLogin}>
         <InputField
           icon={RiMailLine}
@@ -163,8 +164,10 @@ const Login = () => {
             !canLogin || isLoading ? "bg-black/50 cursor-not-allowed" : null
           }`}
         >
-          {isLoading ? <Spinner /> : "Register"}
+          {isLoading ? <Spinner /> : "Login"}
         </button>
+        <p className="text-center">or</p>
+        <p>Register <Link to="/register">here</Link></p>
       </form>
       <ToastContainer />
     </section>

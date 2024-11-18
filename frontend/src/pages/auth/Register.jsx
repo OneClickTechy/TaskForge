@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useCallback, useEffect, useState } from "react";
 import { RiLockPasswordLine, RiUser6Line, RiMailLine } from "react-icons/ri";
@@ -54,7 +55,8 @@ const InputField = ({
       {value && (
         <Icon2
           className={`${
-            value && status === "Username is valid" || status === "Email is available."
+            (value && status === "Username is valid") ||
+            status === "Email is available."
               ? "text-green-500"
               : "text-red-500"
           }`}
@@ -88,6 +90,8 @@ const PasswordInputField = ({
   placeholder,
   value,
   onChange,
+  onClick = null,
+  onBlur = null,
   isPasswordSame,
   isPasswordValid,
 }) => {
@@ -95,6 +99,8 @@ const PasswordInputField = ({
     <div
       className="flex justify-start items-center p-2 gap-2  input-outbox"
       role="input"
+      onClick={onClick}
+      onBlur={onBlur}
     >
       <Icon />
       <label htmlFor={name} className="sr-only">
@@ -109,7 +115,15 @@ const PasswordInputField = ({
         value={value}
         onChange={onChange}
       />
-      {isPasswordSame && isPasswordValid && <Icon2 className={`${isPasswordSame && isPasswordValid ? 'text-green-500':'text-red-500'}`}/>}
+      {isPasswordSame && isPasswordValid && (
+        <Icon2
+          className={`${
+            isPasswordSame && isPasswordValid
+              ? "text-green-500"
+              : "text-red-500"
+          }`}
+        />
+      )}
     </div>
   );
 };
@@ -125,11 +139,15 @@ PasswordInputField.propTypes = {
   isPasswordValid: PropTypes.bool.isRequired,
 };
 
-const PasswordValidate = ({ password }) => {
+const PasswordValidate = ({ password, showPasswordValidator }) => {
   const { hasUppercase, hasLowercase, hasNumber, hasSymbol, noRepeat } =
     PasswordValidChecker(password).passwordCheck;
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div
+      className={`${
+        !showPasswordValidator && "hidden"
+      } flex flex-col justify-center items-center`}
+    >
       <p className="after:content-['*'] after:text-red-500">
         Please ensure your password is pass below rules.
       </p>
@@ -185,7 +203,9 @@ PasswordValidate.propTypes = {
 const Register = () => {
   const [verifyEmail, { isLoading: isVerify }] = useVerifyMutation();
   const [register, { isLoading }] = useRegisterMutation();
+
   const navigate = useNavigate();
+
   const [registerInfo, setRegisterInfo] = useState({
     username: "",
     email: "",
@@ -194,6 +214,7 @@ const Register = () => {
   });
   const [usernameStatus, setUsernameStatus] = useState(null);
   const [emailStatus, setEmailStatus] = useState(null);
+  const [showPasswordValidator, setShowPasswordValidator] = useState(false);
 
   const handleChangeRegisterInfo = (e) => {
     setRegisterInfo({
@@ -204,8 +225,6 @@ const Register = () => {
 
   const { username, email, password, confirmPassword } = registerInfo;
 
-  
-  
   const handleVerifyUsername = useCallback(() => {
     if (!/^[a-zA-Z]/.test(username)) {
       setUsernameStatus("Username must start with an alphabet");
@@ -217,12 +236,10 @@ const Register = () => {
       setUsernameStatus("Username is valid");
     }
   }, [username]); // Include dependencies here if needed
-  
+
   useEffect(() => {
     handleVerifyUsername();
   }, [username, handleVerifyUsername]);
-  
-  
 
   const handleVerifyEmail = async () => {
     if (email) {
@@ -249,13 +266,15 @@ const Register = () => {
     password,
     confirmPassword
   ).isValid;
-
+  const handleShowPasswordValidator = (e) => {
+    setShowPasswordValidator(!showPasswordValidator);
+  };
   const canSave = Boolean(
     username &&
       email &&
       password &&
       confirmPassword &&
-      usernameStatus==="Username is valid" &&
+      usernameStatus === "Username is valid" &&
       emailStatus === "Email is available." &&
       isPasswordSame &&
       isPasswordValid
@@ -307,7 +326,9 @@ const Register = () => {
       });
     }
   };
-
+  useEffect(() => {
+    console.log(showPasswordValidator);
+  }, [showPasswordValidator]);
   return (
     <section className="flex flex-col gap-8 p-2">
       <h1 className="text-2xl font-bold text-center">Welcome to TaskForge</h1>
@@ -362,6 +383,8 @@ const Register = () => {
           placeholder={"password"}
           value={password}
           onChange={handleChangeRegisterInfo}
+          onClick={handleShowPasswordValidator}
+          onBlur={handleShowPasswordValidator}
           isPasswordSame={isPasswordSame}
           isPasswordValid={isPasswordValid}
         />
@@ -396,8 +419,15 @@ const Register = () => {
         >
           {isLoading ? <Spinner /> : "Register"}
         </button>
+        <p className="text-center">or</p>
+        <p>
+          login <Link to="/login">here</Link>
+        </p>
       </form>
-      <PasswordValidate password={password} />
+      <PasswordValidate
+        password={password}
+        showPasswordValidator={showPasswordValidator}
+      />
       <ToastContainer />
     </section>
   );
