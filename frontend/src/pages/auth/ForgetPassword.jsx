@@ -28,7 +28,6 @@ const ForgetPassword = () => {
       });
     } catch (error) {
         setSuccess(false)
-      console.error(error);
       toast.error(error.data.error, {
         position: "top-right",
         autoClose: 2000,
