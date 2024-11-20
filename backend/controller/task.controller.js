@@ -1,3 +1,4 @@
+import Category from "../models/category.model.js";
 import { Task } from "../models/task.model.js";
 
 export const createTask = async (req, res) => {
@@ -9,21 +10,22 @@ export const createTask = async (req, res) => {
     const {
       name,
       description,
-      duedate=undefined,
-      priority=4,
-      category='',
-      completed=false,
+      duedate,
+      priority,
+      category,
+      completed,
     } = req.body;
-    if (!name || !description || !duedate) {
+    if (!name || !description || !priority || !category) {
       return res.status(400).json({ error: "please fill all fields" });
     }
-    
-    const existTask = await Task.findOne({ name, userId });
+    const userCategory = await Category.findOne({ userId })
+    if(!userCategory){
+      return res.status(404).json({"error": "Category document not found."})
+    }
+    const isCategoryExist = Boolean(userCategory.categories.includes(category));
 
-    if (existTask) {
-      return res
-        .status(400)
-        .json({ error: "task with same name already exist" });
+    if(!isCategoryExist){
+      return res.status(404).json({'error': "Category not found"});
     }
 
     const newTask = new Task({
@@ -93,8 +95,10 @@ export const updateTask = async (req, res) => {
       description,
       duedate,
       priority,
-      label,
+      category,
       completed,
+      isFavorite,
+      userId,
       _id, //req task id
     } = req.body;
     if (!Object.keys(req.body).length) {
@@ -111,7 +115,7 @@ export const updateTask = async (req, res) => {
     }
     const updatedTask = await Task.findByIdAndUpdate(
       id,
-      { name, description, duedate, priority, label, completed },
+      { name, description, duedate, priority, category, completed, isFavorite },
       { new: true }
     );
 

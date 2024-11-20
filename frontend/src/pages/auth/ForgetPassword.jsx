@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForgetPasswordMutation } from "../../app/services/userSlicer";
 import { toast } from "react-toastify";
 import LoadingPage from "../../components/LoadingPage";
+import { RiMailLine } from "react-icons/ri";
 const ForgetPassword = () => {
   const [forgetPassword, { isLoading }] = useForgetPasswordMutation();
 
@@ -44,16 +45,21 @@ const ForgetPassword = () => {
   if (isLoading) return <LoadingPage content="Loading, Please wait...." />;
 
   return (
-    <section className=" flex gap-8 flex-col p-2">
+    <section className="w-full min-h-screen flex justify-center items-center gap-8 flex-col p-2">
       <h1 className="text-2xl font-semibold text-center">Forget Password</h1>
       <h3 className={`${!success && 'hidden'} text-xl animate-fadeIn animate-infinite text-red-500`}>Check your email</h3>
       <form onSubmit={handleForgetPassword} className="flex flex-col gap-4">
+      <div
+      className="flex justify-start items-center p-2 gap-2  input-outbox"
+      role="input"
+    >
         <label htmlFor="email" className="sr-only">
           email
         </label>
+        <RiMailLine />
         <input
           type="email"
-          className="border border-black"
+          className="grow"
           placeholder="enter your email"
           id="email"
           name="email"
@@ -62,6 +68,7 @@ const ForgetPassword = () => {
           autoComplete="email"
           required
         />
+        </div>
         <button type="submit">Forget Password</button>
       </form>
       

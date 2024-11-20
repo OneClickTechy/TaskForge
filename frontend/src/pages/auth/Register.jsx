@@ -310,7 +310,7 @@ const Register = () => {
         theme: "light",
       });
       setTimeout(() => {
-        navigate("/");
+        navigate("/dashboard");
       }, 2000);
     } catch (error) {
       console.log(error.data.error);
@@ -330,7 +330,7 @@ const Register = () => {
     console.log(showPasswordValidator);
   }, [showPasswordValidator]);
   return (
-    <section className="flex flex-col gap-8 p-2">
+    <section className="flex flex-col gap-8 items-center justify-center p-2 w-full min-h-screen">
       <h1 className="text-2xl font-bold text-center">Welcome to TaskForge</h1>
       <form
         noValidate

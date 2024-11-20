@@ -29,9 +29,7 @@ createRoot(document.getElementById("root")).render(
             <Route
               index
               element={
-                <PrivateRoutes>
                   <Home />
-                </PrivateRoutes>
               }
             />
             <Route

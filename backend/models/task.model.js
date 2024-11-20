@@ -12,20 +12,21 @@ const taskSchema = new mongoose.Schema(
     },
     duedate: {
       type: Date,
-      
     },
     priority: {
       type: Number,
       enum: [1, 2, 3, 4],
-      default: 4,
+      required: true,
     },
     category: {
       type: String,
-      default: "",
-      minlength:3,
-      maxlength: 30,
+      required: true,
     },
     completed: {
+      type: Boolean,
+      default: false,
+    },
+    isFavorite: {
       type: Boolean,
       default: false,
     },

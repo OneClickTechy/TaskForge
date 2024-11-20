@@ -4,7 +4,7 @@
 
 @layer base {
     input {
-        @apply focus:outline-none;
+        @apply focus:outline-none bg-background focus-within:bg-inherit;
     }
 }
 @layer components{
@@ -21,3 +21,35 @@
     }
 }
 
+/* Base Light Theme */
+/* Light Theme */
+:root[data-theme="light"] {
+    --color-primary: #4f46e5; /* Indigo */
+    --color-primary-light: #6366f1;
+    --color-secondary: #10b981; /* Green */
+    --color-secondary-light: #6ee7b7;
+    --color-background: #ffffff;
+    --color-text: #000000;
+    --color-text-muted: #6b7280;
+    --color-accent: #f59e0b;
+    --color-gradient-start: #06b6d4;
+    --color-gradient-end: #3b82f6;
+  }
+  
+  /* Dark Theme */
+  :root[data-theme="dark"] {
+    --color-primary: #60a5fa; /* Light Blue */
+    --color-primary-light: #93c5fd;
+    --color-secondary: #34d399; /* Light Green */
+    --color-secondary-light: #6ee7b7;
+    --color-background: #1f2937; /* Dark Gray */
+    --color-text: #f9fafb; /* White */
+    --color-text-muted: #9ca3af;
+    --color-accent: #fbbf24; /* Yellow */
+    --color-gradient-start: #083344;
+    --color-gradient-end: #3b82f6;
+
+  }
+  
+  
+ 

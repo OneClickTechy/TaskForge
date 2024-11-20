@@ -1,10 +1,11 @@
 import { useEffect } from "react";
-import { useLogoutMutation } from "../../app/services/userSlicer";
+import { useGetmeQuery, useLogoutMutation } from "../../app/services/userSlicer";
 import LoadingPage from "../../components/LoadingPage";
 import { useNavigate } from "react-router";
 
 const Logout = () => {
   const [logout, { isLoading }] = useLogoutMutation();
+  const {data: user} = useGetmeQuery();
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -6,6 +6,7 @@ import categoryRoutes from "./routes/category.routes.js";
 import connectDB from "./config/db.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { CLIENT_URL } from "./constants/client.constant.js";
 
 //init app
 const app = express();
@@ -24,7 +25,7 @@ app.use(cookieParser());
 
 // CORS configuration
 app.use(cors({
-  origin: 'http://localhost:5173', // Replace with your frontend's exact origin
+  origin: CLIENT_URL, // Replace with your frontend's exact origin
   credentials: true                // Allow credentials (cookies, HTTP authentication)
 }));
 

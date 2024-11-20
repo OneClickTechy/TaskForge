@@ -120,7 +120,8 @@ const Login = () => {
         theme: "light",
       });
       setTimeout(() => {
-        navigate("/");
+        navigate("/dashboard", { replace: true });
+
       }, 2000);
     } catch (error) {
       toast.error(error.data.error, {
@@ -136,7 +137,7 @@ const Login = () => {
     }
   };
   return (
-    <section className="p-2 flex flex-col gap-8">
+    <section className="p-2 flex flex-col gap-8 min-h-screen w-full justify-center items-center">
       <h1 className="text-2xl font-bold text-center">Welcome to TaskForge</h1>
       <form className="flex flex-col gap-4" onSubmit={handleLogin}>
         <InputField
