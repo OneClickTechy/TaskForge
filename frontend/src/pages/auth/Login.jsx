@@ -135,7 +135,6 @@ const Login = () => {
       });
     }
   };
-
   return (
     <section className="p-2 flex flex-col gap-8">
       <h1 className="text-2xl font-bold text-center">Welcome to TaskForge</h1>

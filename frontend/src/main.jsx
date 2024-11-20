@@ -12,6 +12,9 @@ import Logout from "./pages/auth/Logout.jsx";
 import PrivateRoutes from "./components/PrivateRoutes.jsx";
 import ForgetPassword from "./pages/auth/ForgetPassword.jsx";
 import ResetPassword from "./pages/auth/ResetPassword.jsx";
+import DashBoard from "./pages/tasks/DashBoard.jsx";
+import MyTasks from "./pages/tasks/MyTasks.jsx";
+import CreateTask from "./pages/tasks/CreateTask.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
@@ -31,6 +34,23 @@ createRoot(document.getElementById("root")).render(
                 </PrivateRoutes>
               }
             />
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoutes>
+                  <DashBoard />
+                </PrivateRoutes>
+              }
+            />
+            <Route
+              path="/mytasks"
+              element={
+                <PrivateRoutes>
+                  <MyTasks />
+                </PrivateRoutes>
+              }
+            />
+              <Route path="mytasks/create" element={<CreateTask />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />

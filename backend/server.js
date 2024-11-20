@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user.routes.js";
 import taskRoutes from "./routes/task.routes.js";
+import categoryRoutes from "./routes/category.routes.js";
 import connectDB from "./config/db.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -30,6 +31,7 @@ app.use(cors({
 //routes
 app.use("/api/auth", userRoutes);
 app.use("/api/task", taskRoutes);
+app.use("/api/category", categoryRoutes);
 
 //server port
 const port = process.env.PORT;

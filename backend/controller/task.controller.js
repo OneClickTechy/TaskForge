@@ -9,10 +9,10 @@ export const createTask = async (req, res) => {
     const {
       name,
       description,
-      duedate,
-      priority,
-      label,
-      completed,
+      duedate=undefined,
+      priority=4,
+      category='',
+      completed=false,
     } = req.body;
     if (!name || !description || !duedate) {
       return res.status(400).json({ error: "please fill all fields" });
@@ -31,7 +31,7 @@ export const createTask = async (req, res) => {
       description,
       duedate,
       priority,
-      label,
+      category,
       completed,
       userId,
     });

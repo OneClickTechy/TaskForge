@@ -4,6 +4,7 @@ import createToken from "../utils/createToken.js";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import { CLIENT_URL } from "../constants/client.constant.js";
+import Category from "../models/category.model.js";
 
 export const checkEmail = async (req, res) => {
   const { email } = req.body;
@@ -34,6 +35,7 @@ export const register = async (req, res) => {
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+
     const user = new User({
       username,
       email,
@@ -42,6 +44,15 @@ export const register = async (req, res) => {
 
     await user.save();
 
+    const defaultCategory = ['My Tasks'];
+    const category = new Category({
+      categories: defaultCategory,
+      userId: user._id,
+    })
+    await category.save();
+    user.categoryId = category._id;
+    user.save();
+    console.log(user, category);
     createToken(res, user._id);
 
     res.status(201).json({
