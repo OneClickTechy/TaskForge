@@ -3,7 +3,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8000/api/auth",
+    baseUrl: "http://localhost:8000/api/auth",  // Your backend base URL
+    credentials: "include",  // Include credentials (cookies) globally
   }),
   tagTypes: ["User"],
   endpoints: (builder) => ({
@@ -27,7 +28,6 @@ export const userApi = createApi({
         url: `/login`,
         method: "POST",
         body: userInfo,
-        credentials: "include",
       }),
       invalidatesTags: ["User"],
     }),
@@ -35,7 +35,6 @@ export const userApi = createApi({
       query: () => ({
         url: `/logout`,
         method: "POST",
-        credentials: "include",
       }),
       invalidatesTags: ["User"],
     }),
@@ -57,7 +56,6 @@ export const userApi = createApi({
       query: () => ({
         url: `/getme`,
         method: "GET",
-        credentials: "include",
       }),
       providesTags: ["User"],
     }),

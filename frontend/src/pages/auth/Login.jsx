@@ -124,7 +124,8 @@ const Login = () => {
 
       }, 2000);
     } catch (error) {
-      toast.error(error.data.error, {
+      console.log(error.stack)
+      toast.error(error?.error, {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,

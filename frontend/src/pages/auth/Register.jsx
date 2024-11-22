@@ -254,8 +254,9 @@ const Register = () => {
             ? "This email is already in use."
             : "Email is available."
         );
+        console.log('suc')
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Error:", error.stack);
         setEmailStatus("Error verifying the email.");
       }
     }
@@ -267,7 +268,10 @@ const Register = () => {
     confirmPassword
   ).isValid;
   const handleShowPasswordValidator = () => {
-    setShowPasswordValidator(!showPasswordValidator);
+    setShowPasswordValidator(true);
+  };
+  const handleHidePasswordValidator = () => {
+    setShowPasswordValidator(false);
   };
   const canSave = Boolean(
     username &&
@@ -327,8 +331,9 @@ const Register = () => {
     }
   };
   useEffect(() => {
-    console.log(showPasswordValidator);
-  }, [showPasswordValidator]);
+    const timer = setTimeout(() => handleVerifyEmail(), 500); // Debounce for 500ms
+    return () => clearTimeout(timer);
+  }, [email]); // Only trigger when email changes
   return (
     <section className="flex flex-col gap-8 items-center justify-center p-2 w-full min-h-screen">
       <h1 className="text-2xl font-bold text-center">Welcome to TaskForge</h1>
@@ -382,9 +387,14 @@ const Register = () => {
           name={"password"}
           placeholder={"password"}
           value={password}
-          onChange={handleChangeRegisterInfo}
-          onClick={handleShowPasswordValidator}
-          onBlur={handleShowPasswordValidator}
+          onChange={
+          (e) => {
+            handleChangeRegisterInfo(e)
+            handleShowPasswordValidator(e)
+          }
+          
+          }
+          onBlur={handleHidePasswordValidator}
           isPasswordSame={isPasswordSame}
           isPasswordValid={isPasswordValid}
         />
